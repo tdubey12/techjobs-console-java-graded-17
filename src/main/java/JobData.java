@@ -5,10 +5,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -29,15 +26,20 @@ public class JobData {
      */
     public static ArrayList<String> findAll(String field) {
 
-        // load data, if not already loaded
+        // load data, if not already loaded, it will populate alljobs arraylist
         loadData();
 
+        // create an arraylist of string to store the values for the given field parameter
         ArrayList<String> values = new ArrayList<>();
 
+        //iterate all rows from alljobs arraylist stored as hashmap
         for (HashMap<String, String> row : allJobs) {
+            //read value from row hashmap from given field parameter(key)
             String aValue = row.get(field);
 
+            //to avoid adding duplicates, check values arraylist contains or not avalue
             if (!values.contains(aValue)) {
+                //add avalue to values arraylist
                 values.add(aValue);
             }
         }
@@ -49,7 +51,7 @@ public class JobData {
 
         // load data, if not already loaded
         loadData();
-
+        // return alljobs arraylist
         return allJobs;
     }
 
@@ -68,14 +70,15 @@ public class JobData {
 
         // load data, if not already loaded
         loadData();
-
+        // creating arraylist of hashmap to store matching jobs from alljobs
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
-
+        //iterate all rows from alljobs arraylist stored as hashmap
         for (HashMap<String, String> row : allJobs) {
-
+            //read value from row hashmap from given column parameter(key)
             String aValue = row.get(column);
-
-            if (aValue.contains(value)) {
+            //check if lowercase avalue contains given value parameter in lower case
+            if (aValue.toLowerCase().contains(value.toLowerCase())) {
+            // add matching row to jobs arraylist
                 jobs.add(row);
             }
         }
@@ -95,7 +98,33 @@ public class JobData {
         loadData();
 
         // TODO - implement this method
-        return null;
+            // creating arraylist of hashmap to store matching jobs from alljobs
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+            // //iterate all rows from alljobs arraylist stored as hashmap
+        for (HashMap<String, String> row : allJobs) {
+
+            // neeed to read all the keys from hashmap row using keyset method that returns a set <string> object
+            Set<String> keys= row.keySet();
+            //iterate keys
+            for(String key:keys){
+
+                //read a key value from row hashmap
+                String aValue = row.get(key);
+
+                //check if lowercase avalue contains given value parameter in lower case
+                if (aValue.toLowerCase().contains(value.toLowerCase())) {
+                    // add matching row to jobs arraylist
+                    jobs.add(row);
+                    //to avoid duplicate break the inner for loop that is iterating keys
+                    break;
+                }
+            }
+
+
+
+        }
+
+        return jobs;
     }
 
     /**
